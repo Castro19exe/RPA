@@ -2,6 +2,7 @@ import speech_recognition as sr
 import socket
 import webbrowser
 import urllib.parse
+import eel
 
 from tkinter import StringVar
 
@@ -31,18 +32,12 @@ def gravar_e_transcrever_audio():
         except Exception as e:
             print(f"Erro inesperado: {e}")
 
+@eel.expose
 def acionar_gravacao_audio():
     resultado = gravar_e_transcrever_audio()
     if resultado:
-        texto = StringVar()
-
-        texto.set(f"Você disse: {resultado}")
-
-        # Tornar tudo minúsculo para facilitar a comparação
         comando = resultado.lower()
 
-        # Exemplo de ações com base em palavras
-        # Codificar a string para ser usada em uma URL
         if "google" in comando:
             webbrowser.open("https://www.google.com")
         elif "youtube" in comando:
@@ -52,6 +47,7 @@ def acionar_gravacao_audio():
             url = f"https://www.google.com/search?q={query}"
             webbrowser.open(url)
 
+        # return f"Você disse: {resultado}"
+        return resultado
     else:
-        texto.set("Nenhuma transcrição foi feita.")
-# Depois para Remover #
+        return "Nenhuma transcrição foi feita."
