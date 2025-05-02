@@ -4,6 +4,7 @@ from tkinter import Tk, Button, Label, StringVar, ttk
 import eel
 import eel.browsers
 import os
+from sqllite_helper import SQLiteHelper as DB
 
 # MAIN
 # Define caminho do navegador
@@ -22,17 +23,4 @@ eel.start(
     position='center'
 )
 
-# janela = Tk()
-# janela.title("SIG - RPA")
-# janela.geometry("1100x500")
-
-# texto = StringVar()
-# texto.set("fasfaffaecdcadsdxzcdsgs")
-
-# botaoCP = Button(janela, text="Ver Horários dos Comboios", command=get_next_train)
-# botaoCP.pack(pady=10)
-
-# botaoVoz = Button(janela, text="Grave um Áudio", command=acionar_gravacao_audio)
-# botaoVoz.pack(pady=10)
-
-# janela.mainloop()
+DB.__init__("database")
