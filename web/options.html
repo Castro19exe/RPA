@@ -22,25 +22,13 @@
         </div>
     </nav>
 
+    <h1 id="title">Opções</h1>
 
 
-    <h1 id="title">RPA</h1>
-    <section>
-        <button id="btnRecordAudio"><img src="src/img/mic.png" alt="Record Audio" class="img-record-audio"></button>
-        <div>
-            <label for="">Tu disseste:</label>
-            <textarea name="" id="saida" rows="10" cols="30"></textarea>
-        </div>
-        
-    </section>
+    <input type="checkbox" name="" id=""><label for="">Pesquisas Google</label>
+    <input type="checkbox" name="" id=""><label for="">Pesquisas Youtube</label>
+    <input type="checkbox" name="" id=""><label for="">Pesquisas Google</label>
 
-    <script>
-        window.onload = function () {
-            document.getElementById("btnRecordAudio").onclick = async function () {
-                const resposta = await eel.acionar_gravacao_audio()();
-                document.getElementById("saida").innerText = resposta;
-            };
-        };
-    </script>
+   
 </body>
 </html>
