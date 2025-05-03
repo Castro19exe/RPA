@@ -14,6 +14,7 @@ if os.path.exists(edge_path):
 else:
     print("⚠️ Microsoft Edge não encontrado no caminho especificado.")
 
+db = DB("database.db")
 # Iniciar Eel
 eel.init('web')
 eel.start(
@@ -22,5 +23,3 @@ eel.start(
     size=(1500, 700),
     position='center'
 )
-
-DB.__init__("database")
