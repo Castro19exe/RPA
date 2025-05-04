@@ -20,6 +20,5 @@ eel.init('web')
 eel.start(
     'main.html',
     mode='edge',
-    size=(1500, 700),
-    position='center'
+    size=(1500, 900),
 )

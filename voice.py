@@ -14,7 +14,7 @@ def gravar_e_transcrever_audio():
         print("Internet OK")
     except OSError:
         print("Sem internet!")
-        return None
+        return "Sem conexão com a internet."
 
     with sr.Microphone() as source:
         print("Diga algo...")
@@ -23,10 +23,9 @@ def gravar_e_transcrever_audio():
 
         try:
             texto = reconhecer.recognize_google(audio, language="pt-BR")
-            print("Tu disseste:", texto)
             return texto
         except sr.UnknownValueError:
-            print("Não consegui entender o que você disse.")
+            print("Não consegui entender o que tu disseste.")
         except sr.RequestError as e:
             print(f"Erro ao se comunicar com o serviço de reconhecimento: {e}")
         except Exception as e:
@@ -35,19 +34,27 @@ def gravar_e_transcrever_audio():
 @eel.expose
 def acionar_gravacao_audio():
     resultado = gravar_e_transcrever_audio()
+    if not resultado:
+        print("Não disseste nada.")
+        
+    comando = resultado.lower()
+
+    if "google" in comando:
+        webbrowser.open("https://www.google.com")
+    elif "youtube" in comando:
+        webbrowser.open("https://www.youtube.com")
+    else:
+        print(f"Tu disseste: {resultado}")
+        
+    return resultado
+
+@eel.expose
+def pesquisar_no_google(resultado):
     if resultado:
-        comando = resultado.lower()
+        query = urllib.parse.quote(resultado)
+        url = f"https://www.google.com/search?q={query}"
+        webbrowser.open(url)
 
-        if "google" in comando:
-            webbrowser.open("https://www.google.com")
-        elif "youtube" in comando:
-            webbrowser.open("https://www.youtube.com")
-        else:
-            query = urllib.parse.quote(resultado)
-            url = f"https://www.google.com/search?q={query}"
-            webbrowser.open(url)
-
-        # return f"Você disse: {resultado}"
         return resultado
     else:
-        return "Nenhuma transcrição foi feita."
+        return "Não consegui entender o que tu disseste."
