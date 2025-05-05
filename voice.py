@@ -58,3 +58,19 @@ def pesquisar_no_google(resultado):
         return resultado
     else:
         return "Não consegui entender o que tu disseste."
+    
+@eel.expose
+def reconhecer_origem():
+    resultado = gravar_e_transcrever_audio()
+    if not resultado:
+        print("Não disseste nada.")
+        
+    return resultado
+
+@eel.expose
+def reconhecer_destino():
+    resultado = gravar_e_transcrever_audio()
+    if not resultado:
+        print("Não disseste nada.")
+        
+    return resultado

@@ -5,6 +5,17 @@ body {
   background-color: #f4f6f9;
 }
 
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.top-msg {
+  top: 56px;
+}
+
+
 .main-section {
   height: calc(100vh - 123px);
   padding-top: 40px;
@@ -32,12 +43,12 @@ textarea#saida {
   transition: transform 0.2s ease;
 }
 
-#btnPesquisarOnGoogle {
+#btnPesquisarGoogle {
   margin-top: 32px;
 }
 
 .record-btn:hover,
-#btnPesquisarOnGoogle:hover {
+#btnPesquisarGoogle:hover {
   transform: scale(1.05);
 }
 
@@ -97,4 +108,8 @@ textarea#saida {
 
 .recording {
   animation: pulse 1.5s infinite;
+}
+
+footer {
+  margin-top: auto;
 }
