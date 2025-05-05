@@ -6,6 +6,7 @@ import eel.browsers
 import os
 from sqllite_helper import SQLiteHelper as DB
 
+
 # MAIN
 # Define caminho do navegador
 edge_path = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'

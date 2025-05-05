@@ -2,7 +2,7 @@
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-
+import eel
 import datetime
 
 main_url = "https://www.cp.pt/passageiros/pt"
@@ -64,6 +64,8 @@ def get_train_hours(start_location, destination):
     driver.quit()
     return hours
 
+
+@eel.expose
 def get_next_train(start_location, destination, hour):
     train_hours= get_train_hours(start_location, destination)
     next_train = None
