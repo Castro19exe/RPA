@@ -49,17 +49,7 @@ function selecionarValorNoSelect(id, valor) {
     return false;
 }
 
-if (origem && destino) {
-    document.getElementById("inputOrigem").value = origem;
-    document.getElementById("inputDestino").value = destino;
-
-    // Limpa o localStorage após preencher
-    localStorage.removeItem("origem");
-    localStorage.removeItem("destino");
-}
-
 window.onload = function() {
-    // Carregar destinos e configurar data/hora padrão
     carregarDestinos();
 
     // Configurar data e hora atuais
