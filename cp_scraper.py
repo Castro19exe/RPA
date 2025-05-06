@@ -6,6 +6,7 @@ import eel
 import datetime
 
 main_url = "https://www.cp.pt/passageiros/pt"
+stops_url = "https://www.cp.pt/passageiros/pt/consultar-horarios/estacoes"
 
 XPATH_start_location_input ="/html/body/div[1]/div[2]/div[2]/div/div[2]/div/div/div/div/div/div/form/div/div[1]/div[1]/div/input"
 XPATH_destination_input = "/html/body/div[1]/div[2]/div[2]/div/div[2]/div/div/div/div/div/div/form/div/div[1]/div[2]/div/input"
@@ -67,12 +68,15 @@ def get_train_hours(start_location, destination):
 
 @eel.expose
 def get_next_train(start_location, destination, hour):
-    train_hours= get_train_hours(start_location, destination)
+    hour = datetime.datetime.fromisoformat(hour)  # "2025-05-06T14:00" → datetime
+
+    train_hours = get_train_hours(start_location, destination)
     next_train = None
+
     for train_hour in train_hours:
         date_to_compare = datetime.datetime.combine(hour.date(), train_hour.time())
         if train_hour.time() > hour.time():
             next_train = date_to_compare
             break
 
-    return next_train
+    return next_train.isoformat() if next_train else None  # Retornar como string para o JS

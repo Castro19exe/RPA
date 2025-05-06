@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,8 +35,7 @@
                         <div class="input-group">
                             <select class="form-select" id="origem" required>
                                 <option selected disabled value="">Escolha uma estação</option>
-
-                                
+                                <!-- Opções serão preenchidas dinamicamente ou manualmente -->
                             </select>
                             <button type="button" class="btn btn-outline-secondary" id="btnGravarOrigem" title="Ditar Origem">
                                 <i class="fas fa-microphone"></i>
@@ -49,6 +48,7 @@
                         <div class="input-group">
                             <select class="form-select" id="destino" required>
                                 <option selected disabled value="">Escolha uma estação</option>
+                                <!-- Opções serão preenchidas dinamicamente ou manualmente -->
                             </select>
                             <button type="button" class="btn btn-outline-secondary" id="btnGravarDestino" title="Ditar Destino">
                                 <i class="fas fa-microphone"></i>
@@ -60,7 +60,7 @@
                         <label for="data" class="form-label">Data</label>
                         <input type="date" class="form-control" id="data" required>
 
-                        <label for="hora" class="form-label">Hora</label>
+                        <label for="hora" class="form-label mt-2">Hora</label>
                         <input type="time" class="form-control" id="hora" required>
                     </div>
 
@@ -74,16 +74,85 @@
                     </button>
                 </form>
             </div>
-
-            <div class="mt-4 text-center" id="resumoReserva" style="display: none;">
-                <h5>Resumo da Reserva</h5>
-                <p id="resumoTexto"></p>
-            </div>
         </div>
 
         <footer class="mt-auto text-center text-muted py-3 small">
             &copy; 2025 - Sistemas de Informação para a Gestão
         </footer>
     </div>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal fade" id="reservaModal" tabindex="-1" aria-labelledby="reservaModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="reservaModalLabel">Confirmar Reserva</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+          </div>
+          <div class="modal-body" id="modalResumoTexto">
+            <!-- Conteúdo dinâmico aqui -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary">Confirmar Reserva</button>
+          </div>
+        </div>
+      </div>
+    </div>
 </body>
 </html>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('reservaForm');
+
+        const hoje = new Date();
+        document.getElementById('data').value = hoje.toISOString().split('T')[0];
+        const horas = String(hoje.getHours()).padStart(2, '0');
+        const minutos = String(hoje.getMinutes()).padStart(2, '0');
+        document.getElementById('hora').value = `${horas}:${minutos}`;
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const origem = document.getElementById('origem').value;
+            const destino = document.getElementById('destino').value;
+            const data = document.getElementById('data').value;
+            const hora = document.getElementById('hora').value;
+            const passageiros = document.getElementById('passageiros').value;
+            const dataHoraStr = `${data}T${hora}`;
+
+            try {
+                const nextTrain = await eel.get_next_train(origem, destino, dataHoraStr)();
+
+                if (nextTrain) {
+                    const options = {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    };
+                    const formattedDate = new Date(nextTrain).toLocaleDateString('pt-PT', options);
+
+                    const modalResumo = document.getElementById('modalResumoTexto');
+                    modalResumo.innerHTML = `
+                        <strong>Origem:</strong> ${origem}<br>
+                        <strong>Destino:</strong> ${destino}<br>
+                        <strong>Próximo comboio disponível:</strong> ${formattedDate}<br>
+                        <strong>Passageiros:</strong> ${passageiros}
+                    `;
+
+                    const reservaModal = new bootstrap.Modal(document.getElementById('reservaModal'));
+                    reservaModal.show();
+                } else {
+                    alert("Não há comboios disponíveis para o horário selecionado.");
+                }
+            } catch (error) {
+                console.error("Erro ao processar reserva:", error);
+                alert("Ocorreu um erro ao processar a reserva.");
+            }
+        });
+    });
+</script>
