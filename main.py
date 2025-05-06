@@ -8,7 +8,7 @@ from sqllite_helper import SQLiteHelper as DB
 
 @eel.expose
 def get_destinos_nome():
-    return db.get_destinations_eel()
+    return ["Lisboa", "Vila Franca"]
 
 @eel.expose
 def add_destination(name):
