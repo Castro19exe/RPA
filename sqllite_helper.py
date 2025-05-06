@@ -1,4 +1,5 @@
 import sqlite3
+import eel
 
 class SQLiteHelper:
     def __init__(self, db_name):
@@ -7,10 +8,16 @@ class SQLiteHelper:
         self.cursor = None
         self.connect()
         self.create_default_tables()
+        self.expose_to_eel()
 
     def connect(self):
         self.conn = sqlite3.connect(self.db_name)
         self.cursor = self.conn.cursor()
+
+    def expose_to_eel(self):
+        """Expõe os métodos necessários para o Eel"""
+        eel.expose(self.get_destinations_eel)
+        eel.expose(self.delete_destination_eel)
 
     def create_table(self, table_name, fields):
         query = f"CREATE TABLE IF NOT EXISTS {table_name} ({fields})"
@@ -28,24 +35,14 @@ class SQLiteHelper:
             "id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL"
         )
 
-    # ---------- OPTIONS ----------
-    def get_options(self):
-        self.cursor.execute("SELECT id, name, enabled FROM options")
-        return self.cursor.fetchall()
-
-    def add_or_update_option(self, name, enabled):
-        self.cursor.execute("SELECT id FROM options WHERE name = ?", (name,))
-        result = self.cursor.fetchone()
-        if result:
-            self.cursor.execute("UPDATE options SET enabled = ? WHERE name = ?", (enabled, name))
-        else:
-            self.cursor.execute("INSERT INTO options (name, enabled) VALUES (?, ?)", (name, enabled))
-        self.conn.commit()
-
     # ---------- DESTINATIONS ----------
     def get_destinations(self):
-        self.cursor.execute("SELECT id, name FROM destinations")
+        self.cursor.execute("SELECT id, name FROM destinations ORDER BY name")
         return self.cursor.fetchall()
+
+    def get_destinations_eel(self):
+        """Versão do método para ser chamada via Eel"""
+        return self.get_destinations()
 
     def add_destination(self, name):
         self.cursor.execute("INSERT INTO destinations (name) VALUES (?)", (name,))
@@ -58,6 +55,10 @@ class SQLiteHelper:
     def delete_destination(self, dest_id):
         self.cursor.execute("DELETE FROM destinations WHERE id = ?", (dest_id,))
         self.conn.commit()
+
+    def delete_destination_eel(self, dest_id):
+        """Versão do método para ser chamada via Eel"""
+        self.delete_destination(dest_id)
 
     def close(self):
         if self.conn:

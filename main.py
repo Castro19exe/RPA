@@ -6,6 +6,10 @@ import eel.browsers
 import os
 from sqllite_helper import SQLiteHelper as DB
 
+@eel.expose
+def get_destinos_nome():
+    return ["Lisboa", "Vila Franca"]
+
 
 # MAIN
 # Define caminho do navegador
