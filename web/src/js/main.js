@@ -31,6 +31,30 @@ window.onload = function () {
             showToast("Nenhum texto captado.");
         }
     };
+
+    document.getElementById("btnAbrirCP").onclick = function () {
+        if (textoGravado.trim() === "") {
+            showToast("Nenhum comando de voz detetado.");
+            return;
+        }
+    
+        const regex = /(?:quero ir|vou|pretendo ir) de ([a-zçãáéíóú ]+) para ([a-zçãáéíóú ]+)/i;
+        const match = textoGravado.match(regex);
+    
+        if (match) {
+            const origem = match[1].trim();
+            const destino = match[2].trim();
+    
+            // Guardar os dados para usar depois em reservas.html
+            sessionStorage.setItem("origem", origem);
+            sessionStorage.setItem("destino", destino);
+    
+            // Redirecionar
+            window.location.href = "reservas.html";
+        } else {
+            showToast("Não consegui interpretar a origem e o destino.");
+        }
+    };
 };
 
 function showToast(message) {

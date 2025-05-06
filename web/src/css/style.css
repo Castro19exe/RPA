@@ -15,14 +15,13 @@ body {
   top: 56px;
 }
 
-
 .main-section {
   height: calc(100vh - 123px);
   padding-top: 40px;
 }
 
 textarea#saida {
-  width: 300px;
+  width: 50vw;
   height: 150px;
   resize: none;
   font-size: 1rem;
@@ -32,13 +31,13 @@ textarea#saida {
 }
 
 .record-btn {
-  width: 120px;
-  height: 150px;
+  width: 80px;
+  height: 80px;
   margin-top: 32px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 12px;
+  border-radius: 50%;
   overflow: hidden;
   transition: transform 0.2s ease;
 }

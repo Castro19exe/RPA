@@ -38,25 +38,24 @@
         <div class="container-fluid d-flex flex-column align-items-center justify-content-center main-section">
             <h1 class="display-4 text-center mb-4">Reconhecimento de Voz</h1>
             <div class="d-flex align-items-center justify-content-center gap-3 flex-wrap">
-                <button id="btnGravarAudio" class="btn btn-outline-primary record-btn shadow-sm">
-                    <img src="src/img/mic.png" alt="Gravar Áudio" class="img-fluid" />
-                </button>
-            
                 <div class="d-flex flex-column align-items-center">
                     <label for="saida" class="form-label fw-bold text-center">Tu disseste:</label>
                     <textarea id="saida" class="form-control text-box" placeholder="A aguardar que diga algo..." readonly></textarea>
-                </div>
-            
-                <button id="btnPesquisarGoogle" class="btn btn-outline-danger record-btn shadow-sm">
-                    <img src="https://pngimg.com/uploads/google/google_PNG19635.png" alt="Pesquisar no Google" class="img-fluid" />
-                </button>
+                </div> 
             </div>
             <div class="d-flex align-items-center justify-content-center gap-3 flex-wrap">
+                <button id="btnGravarAudio" class="btn btn-outline-primary record-btn shadow-sm">
+                    <!-- <img src="src/img/mic.png" alt="Gravar Áudio" class="img-fluid" /> -->
+                    <i class="fa fa-microphone fa-2x"></i>
+                </button>
                 <button id="btnPararAudio" class="btn btn-outline-secondary record-btn shadow-sm">
                     <i class="fas fa-stop fa-2x"></i>
                 </button>
                 <button id="btnAbrirCP" class="btn btn-outline-success record-btn shadow-sm">
                     <i class="fas fa-train fa-2x"></i>
+                </button>
+                <button id="btnPesquisarGoogle" class="btn btn-outline-danger record-btn shadow-sm">
+                    <img src="https://pngimg.com/uploads/google/google_PNG19635.png" alt="Pesquisar no Google" class="img-fluid" />
                 </button>
             </div>
         </div>

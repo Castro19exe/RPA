@@ -52,6 +52,19 @@ function selecionarValorNoSelect(id, valor) {
 window.onload = function() {
     carregarDestinos();
 
+    // Após carregar destinos
+    const origemGuardada = sessionStorage.getItem("origem");
+    const destinoGuardada = sessionStorage.getItem("destino");
+
+    if (origemGuardada) {
+        selecionarValorNoSelect("origem", origemGuardada);
+        sessionStorage.removeItem("origem");
+    }
+    if (destinoGuardada) {
+        selecionarValorNoSelect("destino", destinoGuardada);
+        sessionStorage.removeItem("destino");
+    }
+
     // Configurar data e hora atuais
     const hoje = new Date();
     document.getElementById('data').value = hoje.toISOString().split('T')[0];
