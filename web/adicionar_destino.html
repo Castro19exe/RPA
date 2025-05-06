@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,9 +30,27 @@
         <div class="container my-5">
             <h1 class="text-center mb-4">Adicionar Destino</h1>
             <div class="mb-3">
+                <a href="reservas.html" class="btn btn-danger">
+                    <i class="fas fa-plus me-2"></i>Voltar
+                </a>
                 <a href="adicionar_destino.html" class="btn btn-success">
                     <i class="fas fa-plus me-2"></i>Adicionar Destino
                 </a>
+            </div>
+        </div>
+
+        <div class="card shadow-sm p-4 mx-auto" style="max-width: 600px;">
+            <form id="destinoForm">
+                <div class="mb-3">
+                    <label for="nomeDestino" class="form-label">Nome do Destino</label>
+                    <input type="text" class="form-control" id="nomeDestino" placeholder="Ex: Braga" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fas fa-save me-2"></i>Guardar Destino
+                </button>
+            </form>
+            <div class="mt-3 alert alert-success d-none" id="alertSucesso">
+                Destino adicionado com sucesso!
             </div>
         </div>
 
@@ -41,6 +58,30 @@
             &copy; 2025 - Sistemas de Informação para a Gestão
         </footer>
     </div>
-</body>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("destinoForm");
+            const nomeInput = document.getElementById("nomeDestino");
+            const alerta = document.getElementById("alertSucesso");
 
+            if (form) {
+                form.addEventListener("submit", function (e) {
+                    e.preventDefault();
+                    const nome = nomeInput.value.trim();
+
+                    if (nome) {
+                        eel.add_destination(nome)(function () {
+                            alerta.classList.remove("d-none");
+                            form.reset();
+
+                            setTimeout(() => {
+                                alerta.classList.add("d-none");
+                            }, 3000);
+                        });
+                    }
+                });
+            }
+        });
+    </script>
+</body>
 </html>

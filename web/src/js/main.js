@@ -2,11 +2,6 @@ let textoGravado = "";
 let micOn = false;
 
 window.onload = function () {
-    // // Dark mode toggle
-    // document.getElementById("toggleDarkMode").addEventListener("change", function () {
-    //     document.body.classList.toggle("dark-mode");
-    // });
-
     const micBtn = document.getElementById("btnGravarAudio");
     const stopBtn = document.getElementById("btnPararAudio");
 

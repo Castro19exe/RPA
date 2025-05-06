@@ -8,10 +8,12 @@ from sqllite_helper import SQLiteHelper as DB
 
 @eel.expose
 def get_destinos_nome():
-    return ["Lisboa", "Vila Franca"]
+    return db.get_destinations_eel()
 
+@eel.expose
+def add_destination(name):
+    db.add_destination(name)
 
-# MAIN
 # Define caminho do navegador
 edge_path = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'
 if os.path.exists(edge_path):
@@ -20,6 +22,7 @@ else:
     print("⚠️ Microsoft Edge não encontrado no caminho especificado.")
 
 db = DB("database.db")
+
 # Iniciar Eel
 eel.init('web')
 eel.start(

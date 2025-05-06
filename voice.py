@@ -1,10 +1,9 @@
 import speech_recognition as sr
 import socket
+import re
 import webbrowser
 import urllib.parse
 import eel
-
-from tkinter import StringVar
 
 def gravar_e_transcrever_audio():
     reconhecer = sr.Recognizer()
@@ -34,10 +33,12 @@ def gravar_e_transcrever_audio():
 @eel.expose
 def acionar_gravacao_audio():
     resultado = gravar_e_transcrever_audio()
-    if not resultado:
-        print("Não disseste nada.")
-        
-    comando = resultado.lower()
+
+    if resultado is not None:
+        comando = resultado.lower()
+    else:
+        print("Não foi possível entender o áudio.")
+        comando = ""
 
     if "google" in comando:
         webbrowser.open("https://www.google.com")

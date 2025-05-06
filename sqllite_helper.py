@@ -42,7 +42,7 @@ class SQLiteHelper:
 
     def get_destinations_eel(self):
         """Versão do método para ser chamada via Eel"""
-        return self.get_destinations()
+        return [name for _, name in self.get_destinations()]
 
     def add_destination(self, name):
         self.cursor.execute("INSERT INTO destinations (name) VALUES (?)", (name,))
