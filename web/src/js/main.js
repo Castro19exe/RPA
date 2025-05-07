@@ -14,6 +14,8 @@ window.onload = function () {
 
         if (micOn && textoGravado.trim() !== "") {
             document.getElementById("saida").innerText = textoGravado;
+            document.getElementById("btnPesquisarGoogle").disabled = false;
+            document.getElementById("btnAbrirCP").disabled = false;
         } else {
             showToast("Não consegui entender o que tu disseste.");
         }
