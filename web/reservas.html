@@ -94,7 +94,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-primary">Confirmar Reserva</button>
+            <button type="button" class="btn btn-primary" id="confirmarReservaBtn">Confirmar Reserva</button>
           </div>
         </div>
       </div>
@@ -154,5 +154,23 @@
                 alert("Ocorreu um erro ao processar a reserva.");
             }
         });
+
+        document.getElementById('confirmarReservaBtn').addEventListener('click', async () => {
+            const origem = document.getElementById('origem').value;
+            const destino = document.getElementById('destino').value;
+            const data = document.getElementById('data').value;
+            const hora = document.getElementById('hora').value;
+            const dataHoraStr = `${data}T${hora}`;
+
+            try {
+                await eel.adicionar_reserva(origem, destino, dataHoraStr)();
+                bootstrap.Modal.getInstance(document.getElementById('reservaModal')).hide();
+                document.getElementById('reservaForm').reset();
+            } catch (error) {
+                console.error("Erro ao guardar reserva:", error);
+                alert("Erro ao guardar a reserva.");
+            }
+        });
+
     });
 </script>
