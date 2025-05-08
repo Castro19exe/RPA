@@ -37,12 +37,12 @@ class SQLiteHelper:
 
     # ---------- DESTINATIONS ----------
     def get_destinations(self):
-        self.cursor.execute("SELECT id, name FROM destinations ORDER BY name")
+        self.cursor.execute("SELECT id, name FROM destinations ORDER BY id")
         return self.cursor.fetchall()
 
     def get_destinations_eel(self):
         """Versão do método para ser chamada via Eel"""
-        return [name for _, name in self.get_destinations()]
+        return [{'id': row[0], 'name': row[1]} for row in self.get_destinations()]
 
     def add_destination(self, name):
         self.cursor.execute("INSERT INTO destinations (name) VALUES (?)", (name,))

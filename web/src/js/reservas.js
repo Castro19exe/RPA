@@ -1,6 +1,6 @@
 const form = document.getElementById('reservaForm');
 const resumo = document.getElementById('resumoReserva');
-const resumoTexto = document.getElementById('resumoTexto');
+const modalResumo = document.getElementById('modalResumoTexto');
 
 async function carregarDestinos() {
     try {
@@ -23,8 +23,8 @@ async function carregarDestinos() {
         destinos.forEach(destino => {
             // Adicionar ao destino
             const optionDestino = document.createElement('option');
-            optionDestino.value = destino;
-            optionDestino.textContent = destino;
+            optionDestino.value = destino.id;
+            optionDestino.textContent = destino.name;
             selectDestino.appendChild(optionDestino);
             
             // Adicionar à origem (usar clone para evitar referência ao mesmo objeto)
@@ -40,7 +40,7 @@ async function carregarDestinos() {
 function selecionarValorNoSelect(id, valor) {
     const select = document.getElementById(id);
     for (const option of select.options) {
-        if (option.value.toLowerCase() === valor.toLowerCase()) {
+        if (option.textContent.toLowerCase() === valor.toLowerCase()) {
             select.value = option.value;
             return true;
         }
@@ -49,7 +49,7 @@ function selecionarValorNoSelect(id, valor) {
     return false;
 }
 
-window.onload = function() {
+window.onload = async function() {
     carregarDestinos();
 
     // Após carregar destinos
@@ -103,7 +103,6 @@ window.onload = function() {
         btn.disabled = false;
     };
 
-    // Configurar submit do formulário
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
@@ -115,29 +114,29 @@ window.onload = function() {
         const dataHoraStr = `${data}T${hora}`;
 
         try {
-            // Chama a função Python para obter o próximo comboio
             const nextTrain = await eel.get_next_train(origem, destino, dataHoraStr)();
 
             if (nextTrain) {
-                // Formata a resposta para exibição
-                const options = { 
-                    weekday: 'long', 
-                    year: 'numeric', 
-                    month: 'long', 
+                const options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
                     day: 'numeric',
-                    hour: '2-digit', 
-                    minute: '2-digit' 
+                    hour: '2-digit',
+                    minute: '2-digit'
                 };
                 const formattedDate = new Date(nextTrain).toLocaleDateString('pt-PT', options);
 
-                // Exibe o resumo da reserva
-                resumoTexto.innerHTML = `
+                const modalResumo = document.getElementById('modalResumoTexto');
+                modalResumo.innerHTML = `
                     <strong>Origem:</strong> ${origem}<br>
                     <strong>Destino:</strong> ${destino}<br>
                     <strong>Próximo comboio disponível:</strong> ${formattedDate}<br>
                     <strong>Passageiros:</strong> ${passageiros}
                 `;
-                resumo.style.display = 'block';
+
+                const reservaModal = new bootstrap.Modal(document.getElementById('reservaModal'));
+                reservaModal.show();
             } else {
                 alert("Não há comboios disponíveis para o horário selecionado.");
             }

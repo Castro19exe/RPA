@@ -40,7 +40,7 @@ window.onload = function () {
             return;
         }
     
-        const regex = /(?:quero ir|vou|pretendo ir) de ([a-zçãáéíóú ]+) para ([a-zçãáéíóú ]+)/i;
+        const regex = /(?:quero ir|vou|pretendo ir|ir|sair|partir)?\s*(?:de)?\s*([a-zçãáéíóú ]+?)\s*(?:para|até|em direção a)\s*([a-zçãáéíóú ]+)/i;
         const match = textoGravado.match(regex);
     
         if (match) {
