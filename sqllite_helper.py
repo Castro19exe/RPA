@@ -18,6 +18,7 @@ class SQLiteHelper:
         """Expõe os métodos necessários para o Eel"""
         eel.expose(self.get_destinations_eel)
         eel.expose(self.delete_destination_eel)
+        eel.expose(self.adicionar_reserva)
 
     def create_table(self, table_name, fields):
         query = f"CREATE TABLE IF NOT EXISTS {table_name} ({fields})"
@@ -34,6 +35,11 @@ class SQLiteHelper:
             "destinations",
             "id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL"
         )
+        self.create_table(
+            "reservas",
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, origem TEXT NOT NULL, destino TEXT NOT NULL, data TEXT NOT NULL"
+        )
+
 
     # ---------- DESTINATIONS ----------
     def get_destinations(self):
@@ -59,6 +65,15 @@ class SQLiteHelper:
     def delete_destination_eel(self, dest_id):
         """Versão do método para ser chamada via Eel"""
         self.delete_destination(dest_id)
+
+
+    # ---------- Reservas ----------
+
+    def adicionar_reserva(self, origem, destino, data):
+        self.cursor.execute("INSERT INTO reservas (origem, destino, data) VALUES (?, ?, ?)", (origem, destino, data))
+        self.conn.commit()
+
+
 
     def close(self):
         if self.conn:
