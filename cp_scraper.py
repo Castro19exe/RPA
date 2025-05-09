@@ -80,3 +80,30 @@ def get_next_train(start_location, destination, hour):
             break
 
     return next_train.isoformat() if next_train else None  # Retornar como string para o JS
+
+@eel.expose
+def get_all_stops():
+    driver = get_driver()
+
+    driver.get(stops_url)
+
+    XPATH_next_button = '/html/body/div[1]/div[2]/div[2]/div/div[3]/div/div/div/div[2]/div[2]/div/ul/li[9]/a'
+    XPATH_table_tbody = '/html/body/div[1]/div[2]/div[2]/div/div[3]/div/div/div/table/tbody'
+    time.sleep(2)
+    stops = []
+    while True:
+        try:
+            next_button = driver.find_element(By.XPATH, XPATH_next_button)
+            next_button.click()
+
+            tbody = driver.find_element(By.XPATH, XPATH_table_tbody)
+            tds = tbody.find_elements(By.CLASS_NAME, 'sorting_1')
+
+            for td in tds:
+                stops.append(td.text)
+
+        except Exception as e:
+            break
+
+    
+    return stops
