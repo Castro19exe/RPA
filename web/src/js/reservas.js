@@ -1,7 +1,3 @@
-const form = document.getElementById('reservaForm');
-const resumo = document.getElementById('resumoReserva');
-const modalResumo = document.getElementById('modalResumoTexto');
-
 async function carregarDestinos() {
     try {
         // Chamar a função Python via Eel
@@ -39,17 +35,23 @@ async function carregarDestinos() {
 // Função para selecionar a opção correta no combobox
 function selecionarValorNoSelect(id, valor) {
     const select = document.getElementById(id);
+
     for (const option of select.options) {
         if (option.textContent.toLowerCase() === valor.toLowerCase()) {
             select.value = option.value;
             return true;
         }
     }
+
     alert(`Estação "${valor}" não encontrada.`);
     return false;
 }
 
 window.onload = async function() {
+    const form = document.getElementById('reservaForm');
+    const resumo = document.getElementById('resumoReserva');
+    const modalResumo = document.getElementById('modalResumoTexto');
+
     carregarDestinos();
 
     // Após carregar destinos

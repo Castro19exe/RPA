@@ -4,10 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function carregarDestinos() {
     try {
-        // Chamar a função Python via Eel para obter os destinos
         const destinos = await eel.get_destinations_eel()();
         
-        // Obter o elemento tbody da tabela
         const tbody = document.getElementById('destinosTableBody');
         tbody.innerHTML = '';
         
@@ -25,8 +23,9 @@ async function carregarDestinos() {
             const tdAcoes = document.createElement('td');
             const btnEditar = document.createElement('button');
             const btnEliminar = document.createElement('button');
-            btnEditar.className = 'btn btn-warning btn-sm';
-            btnEditar.innerHTML = '<i class="fas fa-trash-alt me-1"></i>Editar';
+            btnEditar.className = 'btn btn-primary btn-sm';
+            btnEditar.innerHTML = '<i class="fas fa-pen-alt me-1"></i>Editar';
+            btnEditar.onclick = () => ediatrDestino(destino.id);
             btnEliminar.className = 'btn btn-danger btn-sm';
             btnEliminar.innerHTML = '<i class="fas fa-trash-alt me-1"></i>Eliminar';
             btnEliminar.onclick = () => eliminarDestino(destino.id);
@@ -43,6 +42,23 @@ async function carregarDestinos() {
 }
 
 async function eliminarDestino(id) {
+    if (confirm('Tem certeza que deseja eliminar este destino?')) {
+        try {
+            // Chamar a função Python via Eel para eliminar o destino
+            await eel.delete_destination(id)();
+            
+            // Recarregar a lista de destinos
+            carregarDestinos();
+            
+            alert('Destino eliminado com sucesso!');
+        } catch (error) {
+            console.error('Erro ao eliminar destino:', error);
+            alert('Ocorreu um erro ao eliminar o destino.');
+        }
+    }
+}
+
+async function editarDestino(id) {
     if (confirm('Tem certeza que deseja eliminar este destino?')) {
         try {
             // Chamar a função Python via Eel para eliminar o destino

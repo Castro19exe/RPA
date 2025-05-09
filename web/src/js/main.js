@@ -8,6 +8,7 @@ window.onload = function () {
     micBtn.onclick = async function () {
         micOn = true;
         micBtn.classList.add("recording");
+        showToastSuccess("A Captar Áudio ...");
         
         textoGravado = await eel.acionar_gravacao_audio()();
         micBtn.classList.remove("recording");
@@ -17,26 +18,27 @@ window.onload = function () {
             document.getElementById("btnPesquisarGoogle").disabled = false;
             document.getElementById("btnAbrirCP").disabled = false;
         } else {
-            showToast("Não consegui entender o que tu disseste.");
+            showToastWarning("Não consegui entender o que tu disseste.");
         }
     };
 
     stopBtn.onclick = function () {
         micOn = false;
-        showToast("Gravação interrompida.");
+        showToastWarning("Gravação interrompida.");
+        return;
     };
 
     document.getElementById("btnPesquisarGoogle").onclick = async function () {
         if (textoGravado.trim() !== "") {
             await eel.pesquisar_no_google(textoGravado)();
         } else {
-            showToast("Nenhum texto captado.");
+            showToastWarning("Nenhum texto captado.");
         }
     };
 
     document.getElementById("btnAbrirCP").onclick = function () {
         if (textoGravado.trim() === "") {
-            showToast("Nenhum comando de voz detetado.");
+            showToastWarning("Nenhum comando de voz detetado.");
             return;
         }
     
@@ -54,13 +56,19 @@ window.onload = function () {
             // Redirecionar
             window.location.href = "reservas.html";
         } else {
-            showToast("Não consegui interpretar a origem e o destino.");
+            showToastWarning("Não consegui interpretar a origem e o destino.");
         }
     };
 };
 
-function showToast(message) {
-    document.getElementById("toastMessage").innerText = message;
-    const toast = new bootstrap.Toast(document.getElementById("customToast"));
+function showToastWarning(message) {
+    document.getElementById("toastMessageWarning").innerText = message;
+    const toast = new bootstrap.Toast(document.getElementById("customToastWarning"));
+    toast.show();
+}
+
+function showToastSuccess(message) {
+    document.getElementById("toastMessageSuccess").innerText = message;
+    const toast = new bootstrap.Toast(document.getElementById("customToastSuccess"));
     toast.show();
 }
