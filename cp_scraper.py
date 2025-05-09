@@ -41,7 +41,7 @@ def get_driver():
 
     return driver
 
-
+@eel.expose
 def get_train_hours(start_location, destination):
     driver = get_driver()
     start_location = normalize(start_location)

@@ -16,7 +16,6 @@ async function carregarReservas() {
         
         reservas.forEach(reserva => {
             const tr = document.createElement('tr');
-            alert(reserva)
             if(reserva.canceled == 0){
             
                 const tdOrigem = document.createElement('td');
@@ -35,6 +34,13 @@ async function carregarReservas() {
                 const tdHora = document.createElement('td');
                 tdHora.textContent = reserva.data;
                 tr.appendChild(tdHora);
+
+
+                const tdPassageiros = document.createElement('td');
+                tdPassageiros.textContent = reserva.passageiros;
+                tr.appendChild(tdPassageiros);
+
+
                 const tdAcoes = document.createElement('td');
                 const btnEliminar = document.createElement('button');
                 btnEliminar.className = 'btn btn-danger btn-sm';

@@ -74,12 +74,12 @@ class SQLiteHelper:
     # ---------- Reservas ----------
 
     def get_reservas(self):
-        self.cursor.execute("SELECT id, origem, destino, data ,canceled FROM reservas ORDER BY id")
+        self.cursor.execute("SELECT id, origem, destino, data ,passageiros,canceled FROM reservas ORDER BY id")
         return self.cursor.fetchall()
 
     def get_reservas_eel(self):
         """Versão do método para ser chamada via Eel"""
-        return [{'id': row[0], 'origem': row[1], 'destino': row[2], 'data': row[3], 'canceled': row[4]} for row in self.get_reservas()]
+        return [{'id': row[0], 'origem': row[1], 'destino': row[2], 'data': row[3],'passageiros':row[4], 'canceled': row[5]} for row in self.get_reservas()]
 
     def adicionar_reserva(self, origem, destino, data,passageiros):
         self.cursor.execute("INSERT INTO reservas (origem, destino, data,passageiros ,canceled) VALUES (?, ?, ?, ?,?)", (origem, destino, data,passageiros,0))
