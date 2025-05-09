@@ -1,5 +1,5 @@
 from voice import acionar_gravacao_audio
-from cp_scraper import get_next_train, get_train_hours
+from cp_scraper import get_next_train, get_train_hours,get_all_stops
 from tkinter import Tk, Button, Label, StringVar, ttk
 import eel
 import eel.browsers
@@ -14,6 +14,13 @@ def get_destinos_nome():
 def add_destination(name):
     db.add_destination(name)
 
+@eel.expose
+def update_all_destination():
+    destinations = get_all_stops()
+    db.custom_sql_query("DELETE FROM destinations")
+
+    for destination in destinations:
+        db.add_destination(destination)
 # Define caminho do navegador
 edge_path = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'
 if os.path.exists(edge_path):

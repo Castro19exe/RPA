@@ -81,7 +81,6 @@ def get_next_train(start_location, destination, hour):
 
     return next_train.isoformat() if next_train else None  # Retornar como string para o JS
 
-@eel.expose
 def get_all_stops():
     driver = get_driver()
 
