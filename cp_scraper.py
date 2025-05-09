@@ -4,6 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import eel
 import datetime
+import unicodedata
 
 main_url = "https://www.cp.pt/passageiros/pt"
 stops_url = "https://www.cp.pt/passageiros/pt/consultar-horarios/estacoes"
@@ -13,6 +14,15 @@ XPATH_destination_input = "/html/body/div[1]/div[2]/div[2]/div/div[2]/div/div/di
 XPATH_search_button = "/html/body/div[1]/div[2]/div[2]/div/div[2]/div/div/div/div/div/div/form/div/div[2]/div[3]/input"
 
 XPATH_arrived_hour= "//*[starts-with(@id, 'goDeparTime')]"
+
+def normalize(text):
+    normalize_text = unicodedata.normalize('NFD', text)
+    new_text = ''.join(
+        char for char in normalize_text 
+        if unicodedata.category(char) != 'Mn'
+    ).replace('ç', 'c').replace('Ç', 'C')
+    
+    return new_text.lower() 
 
 def get_driver():
     options = webdriver.ChromeOptions()
@@ -31,9 +41,11 @@ def get_driver():
 
     return driver
 
+
 def get_train_hours(start_location, destination):
     driver = get_driver()
-
+    start_location = normalize(start_location)
+    destination = normalize(destination)
     start_location_input = driver.find_element(By.XPATH, XPATH_start_location_input )
     start_location_input.send_keys(start_location)
 
