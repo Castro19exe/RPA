@@ -1,3 +1,58 @@
+import { showSpinner, hideSpinner } from './utils.js';
+
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('reservaForm');
+
+    const hoje = new Date();
+    document.getElementById('data').value = hoje.toISOString().split('T')[0];
+    const horas = String(hoje.getHours()).padStart(2, '0');
+    const minutos = String(hoje.getMinutes()).padStart(2, '0');
+    document.getElementById('hora').value = `${horas}:${minutos}`;
+
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const origem = document.getElementById('origem').value;
+        const destino = document.getElementById('destino').value;
+        const data = document.getElementById('data').value;
+        const hora = document.getElementById('hora').value;
+        const passageiros = document.getElementById('passageiros').value;
+        const dataHoraStr = `${data}T${hora}`;
+
+        try {
+            const nextTrain = await eel.get_next_train(origem, destino, dataHoraStr)();
+
+            if (nextTrain) {
+                const options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                };
+                const formattedDate = new Date(nextTrain).toLocaleDateString('pt-PT', options);
+
+                const modalResumo = document.getElementById('modalResumoTexto');
+                modalResumo.innerHTML = `
+                    <strong>Origem:</strong> ${origem}<br>
+                    <strong>Destino:</strong> ${destino}<br>
+                    <strong>Próximo comboio disponível:</strong> ${formattedDate}<br>
+                    <strong>Passageiros:</strong> ${passageiros}
+                `;
+
+                const reservaModal = new bootstrap.Modal(document.getElementById('reservaModal'));
+                reservaModal.show();
+            } else {
+                alert("Não há comboios disponíveis para o horário selecionado.");
+            }
+        } catch (error) {
+            console.error("Erro ao processar reserva:", error);
+            alert("Ocorreu um erro ao processar a reserva.");
+        }
+    });
+});
+
 const form = document.getElementById('reservaForm');
 const resumo = document.getElementById('resumoReserva');
 const modalResumo = document.getElementById('modalResumoTexto');
@@ -23,7 +78,7 @@ async function carregarDestinos() {
         destinos.forEach(destino => {
             // Adicionar ao destino
             const optionDestino = document.createElement('option');
-            optionDestino.value = destino.id;
+            optionDestino.value = destino.name;
             optionDestino.textContent = destino.name;
             selectDestino.appendChild(optionDestino);
             
@@ -106,6 +161,7 @@ window.onload = async function() {
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
+        showSpinner();
         const origem = document.getElementById('origem').value;
         const destino = document.getElementById('destino').value;
         const data = document.getElementById('data').value;
@@ -136,6 +192,7 @@ window.onload = async function() {
                 `;
 
                 const reservaModal = new bootstrap.Modal(document.getElementById('reservaModal'));
+                hideSpinner()
                 reservaModal.show();
             } else {
                 alert("Não há comboios disponíveis para o horário selecionado.");

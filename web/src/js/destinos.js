@@ -1,3 +1,4 @@
+import { showSpinner, hideSpinner } from './utils.js';
 document.addEventListener('DOMContentLoaded', function() {
     carregarDestinos();
 
@@ -25,10 +26,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 async function atualizarListaDestinos() {
-
+    showSpinner()
     
     await eel.update_all_destination()();
-
+    hideSpinner();
     carregarDestinos()
 }
 
