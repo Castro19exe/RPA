@@ -116,5 +116,5 @@ def get_all_stops():
         except Exception as e:
             break
 
-    
+    driver.quit()
     return stops

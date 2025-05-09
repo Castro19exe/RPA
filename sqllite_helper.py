@@ -17,6 +17,7 @@ class SQLiteHelper:
     def expose_to_eel(self):
         """Expõe os métodos necessários para o Eel"""
         eel.expose(self.get_destinations_eel)
+        eel.expose(self.get_reservas_eel)
         eel.expose(self.delete_destination_eel)
         eel.expose(self.adicionar_reserva)
 
@@ -37,7 +38,7 @@ class SQLiteHelper:
         )
         self.create_table(
             "reservas",
-            "id INTEGER PRIMARY KEY AUTOINCREMENT, origem TEXT NOT NULL, destino TEXT NOT NULL, data TEXT NOT NULL"
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, origem TEXT NOT NULL, destino TEXT NOT NULL, data TEXT NOT NULL,passageiros INT NOT NULL, canceled BOOLEAN NOT NULL"
         )
 
     def custom_sql_query(self, sql):
@@ -72,11 +73,19 @@ class SQLiteHelper:
 
     # ---------- Reservas ----------
 
-    def adicionar_reserva(self, origem, destino, data):
-        self.cursor.execute("INSERT INTO reservas (origem, destino, data) VALUES (?, ?, ?)", (origem, destino, data))
+    def get_reservas(self):
+        self.cursor.execute("SELECT id, origem, destino, data ,canceled FROM reservas ORDER BY id")
+        return self.cursor.fetchall()
+
+    def get_reservas_eel(self):
+        """Versão do método para ser chamada via Eel"""
+        return [{'id': row[0], 'origem': row[1], 'destino': row[2], 'data': row[3], 'canceled': row[4]} for row in self.get_reservas()]
+
+    def adicionar_reserva(self, origem, destino, data,passageiros):
+        self.cursor.execute("INSERT INTO reservas (origem, destino, data,passageiros ,canceled) VALUES (?, ?, ?, ?,?)", (origem, destino, data,passageiros,0))
         self.conn.commit()
 
-
+    
 
     def close(self):
         if self.conn:
