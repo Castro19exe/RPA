@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-function renderizarTabela(pagina) {
+async function renderizarTabela(pagina) {
     const tbody = document.getElementById('destinosTableBody');
     tbody.innerHTML = '';
 
@@ -54,7 +54,7 @@ function renderizarTabela(pagina) {
     renderizarPaginacao();
 }
 
-function renderizarPaginacao() {
+async function renderizarPaginacao() {
     const totalPaginas = Math.ceil(destinos.length / registosPorPagina);
     const paginacaoDiv = document.getElementById('paginacao');
     paginacaoDiv.innerHTML = '';
@@ -66,6 +66,7 @@ function renderizarPaginacao() {
         btn.onclick = () => {
             paginaAtual = i;
             renderizarTabela(paginaAtual);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         };
         paginacaoDiv.appendChild(btn);
     }
@@ -87,39 +88,5 @@ async function carregarDestinos() {
     } catch (error) {
         console.error('Erro ao carregar destinos:', error);
         showToast("Ocorreu um erro ao carregar os destinos.");
-    }
-}
-
-async function eliminarDestino(id) {
-    if (confirm('Tem certeza que deseja eliminar este destino?')) {
-        try {
-            // Chamar a função Python via Eel para eliminar o destino
-            await eel.delete_destination(id)();
-            
-            // Recarregar a lista de destinos
-            carregarDestinos();
-            
-            alert('Destino eliminado com sucesso!');
-        } catch (error) {
-            console.error('Erro ao eliminar destino:', error);
-            alert('Ocorreu um erro ao eliminar o destino.');
-        }
-    }
-}
-
-async function editarDestino(id) {
-    if (confirm('Tem certeza que deseja eliminar este destino?')) {
-        try {
-            // Chamar a função Python via Eel para eliminar o destino
-            await eel.delete_destination(id)();
-            
-            // Recarregar a lista de destinos
-            carregarDestinos();
-            
-            alert('Destino eliminado com sucesso!');
-        } catch (error) {
-            console.error('Erro ao eliminar destino:', error);
-            alert('Ocorreu um erro ao eliminar o destino.');
-        }
     }
 }
