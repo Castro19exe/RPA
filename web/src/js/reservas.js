@@ -177,7 +177,7 @@ window.onload = async function() {
 
         try {
             const nextTrain = await eel.get_next_train(origem, destino, dataHoraStr)();
-
+            hideSpinner()
             if (nextTrain) {
                 const options = {
                     weekday: 'long',
@@ -198,9 +198,17 @@ window.onload = async function() {
                 `;
 
                 const reservaModal = new bootstrap.Modal(document.getElementById('reservaModal'));
-                hideSpinner()
+                
                 reservaModal.show();
+
+
+                document.querySelector('#confirmarReservaBtn').addEventListener('click', function() {
+                    console.log("ADD")
+                    eel.adicionar_reserva(origem, destino, formattedDate, passageiros)()
+                    window.location.href = "reservas_all.html";
+                });
             } else {
+                hideSpinner()
                 alert("Não há comboios disponíveis para o horário selecionado.");
             }
         } catch (error) {
