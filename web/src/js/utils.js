@@ -83,6 +83,18 @@ function showToast(message, type = 'info', duration = 3000) {
     }, duration);
 }
 
+function showToastWarning(message) {
+    document.getElementById("toastMessageWarning").innerText = message;
+    const toast = new bootstrap.Toast(document.getElementById("customToastWarning"));
+    toast.show();
+}
+
+function showToastSuccess(message) {
+    document.getElementById("toastMessageSuccess").innerText = message;
+    const toast = new bootstrap.Toast(document.getElementById("customToastSuccess"));
+    toast.show();
+}
+
 function createToastContainer() {
     const container = document.createElement('div');
     container.id = 'toast-container';
@@ -94,4 +106,4 @@ function createToastContainer() {
     return container;
 }
 
-export { showSpinner, hideSpinner, showToast };
+export { showSpinner, hideSpinner, showToast, showToastWarning, showToastSuccess };

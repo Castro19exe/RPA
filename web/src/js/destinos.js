@@ -1,8 +1,11 @@
 import { showSpinner, hideSpinner } from './utils.js';
+
+let destinos = [];
+let paginaAtual = 1;
+const registosPorPagina = 30;
+
 document.addEventListener('DOMContentLoaded', function() {
     carregarDestinos();
-
-
 
     const atualizarBtn = document.getElementById('atualizarDestinosBtn');
     if (atualizarBtn) {
@@ -25,6 +28,49 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+function renderizarTabela(pagina) {
+    const tbody = document.getElementById('destinosTableBody');
+    tbody.innerHTML = '';
+
+    const inicio = (pagina - 1) * registosPorPagina;
+    const fim = inicio + registosPorPagina;
+    const paginaDestinos = destinos.slice(inicio, fim);
+
+    paginaDestinos.forEach(destino => {
+        const tr = document.createElement('tr');
+
+        const tdId = document.createElement('td');
+        tdId.textContent = destino.id;
+        tr.appendChild(tdId);
+
+        const tdNome = document.createElement('td');
+        tdNome.textContent = destino.name;
+        tr.appendChild(tdNome);
+
+        tbody.appendChild(tr);
+    });
+
+    renderizarPaginacao();
+}
+
+function renderizarPaginacao() {
+    const totalPaginas = Math.ceil(destinos.length / registosPorPagina);
+    const paginacaoDiv = document.getElementById('paginacao');
+    paginacaoDiv.innerHTML = '';
+
+    for (let i = 1; i <= totalPaginas; i++) {
+        const btn = document.createElement('button');
+        btn.className = `btn btn-sm ${i === paginaAtual ? 'btn-primary' : 'btn-outline-primary'} mx-1`;
+        btn.textContent = i;
+        btn.onclick = () => {
+            paginaAtual = i;
+            renderizarTabela(paginaAtual);
+        };
+        paginacaoDiv.appendChild(btn);
+    }
+}
+
 async function atualizarListaDestinos() {
     showSpinner()
     
@@ -35,37 +81,9 @@ async function atualizarListaDestinos() {
 
 async function carregarDestinos() {
     try {
-        const destinos = await eel.get_destinations_eel()();
-        
-        const tbody = document.getElementById('destinosTableBody');
-        tbody.innerHTML = '';
-        
-        destinos.forEach(destino => {
-            const tr = document.createElement('tr');
-        
-            const tdId = document.createElement('td');
-            tdId.textContent = destino.id;
-            tr.appendChild(tdId);
-        
-            const tdNome = document.createElement('td');
-            tdNome.textContent = destino.name;
-            tr.appendChild(tdNome);
-        
-            const tdAcoes = document.createElement('td');
-            const btnEditar = document.createElement('button');
-            const btnEliminar = document.createElement('button');
-            btnEditar.className = 'btn btn-primary btn-sm';
-            btnEditar.innerHTML = '<i class="fas fa-pen-alt me-1"></i>Editar';
-            btnEditar.onclick = () => ediatrDestino(destino.id);
-            btnEliminar.className = 'btn btn-danger btn-sm';
-            btnEliminar.innerHTML = '<i class="fas fa-trash-alt me-1"></i>Eliminar';
-            btnEliminar.onclick = () => eliminarDestino(destino.id);
-            tdAcoes.appendChild(btnEditar);
-            tdAcoes.appendChild(btnEliminar);
-            tr.appendChild(tdAcoes);
-        
-            tbody.appendChild(tr);
-        });
+        destinos = await eel.get_destinations_eel()();
+        paginaAtual = 1;
+        renderizarTabela(paginaAtual);
     } catch (error) {
         console.error('Erro ao carregar destinos:', error);
         showToast("Ocorreu um erro ao carregar os destinos.");

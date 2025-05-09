@@ -1,3 +1,5 @@
+import { showToastWarning, showToastSuccess } from './utils.js';
+
 let textoGravado = "";
 let micOn = false;
 
@@ -60,15 +62,3 @@ window.onload = function () {
         }
     };
 };
-
-function showToastWarning(message) {
-    document.getElementById("toastMessageWarning").innerText = message;
-    const toast = new bootstrap.Toast(document.getElementById("customToastWarning"));
-    toast.show();
-}
-
-function showToastSuccess(message) {
-    document.getElementById("toastMessageSuccess").innerText = message;
-    const toast = new bootstrap.Toast(document.getElementById("customToastSuccess"));
-    toast.show();
-}
