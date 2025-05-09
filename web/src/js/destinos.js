@@ -1,6 +1,37 @@
+import { showSpinner, hideSpinner } from './utils.js';
 document.addEventListener('DOMContentLoaded', function() {
     carregarDestinos();
+
+
+
+    const atualizarBtn = document.getElementById('atualizarDestinosBtn');
+    if (atualizarBtn) {
+        atualizarBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const modal = new bootstrap.Modal(document.getElementById('destinoModal'));
+            modal.show();
+        });
+    }
+    
+    const confirmarBtn = document.getElementById('confirmarAtualizacaoBtn');
+    if (confirmarBtn) {
+        confirmarBtn.addEventListener('click', function() {
+            
+            const modal = bootstrap.Modal.getInstance(document.getElementById('destinoModal'));
+            modal.hide();
+            
+            
+            atualizarListaDestinos();
+        });
+    }
 });
+async function atualizarListaDestinos() {
+    showSpinner()
+    
+    await eel.update_all_destination()();
+    hideSpinner();
+    carregarDestinos()
+}
 
 async function carregarDestinos() {
     try {

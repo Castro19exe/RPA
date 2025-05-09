@@ -40,6 +40,9 @@ class SQLiteHelper:
             "id INTEGER PRIMARY KEY AUTOINCREMENT, origem TEXT NOT NULL, destino TEXT NOT NULL, data TEXT NOT NULL"
         )
 
+    def custom_sql_query(self, sql):
+        self.cursor.execute(sql)
+        return self.cursor.fetchall()
 
     # ---------- DESTINATIONS ----------
     def get_destinations(self):
