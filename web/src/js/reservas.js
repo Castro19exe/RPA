@@ -111,7 +111,7 @@ window.onload = async function() {
     const resumo = document.getElementById('resumoReserva');
     const modalResumo = document.getElementById('modalResumoTexto');
 
-    carregarDestinos();
+    await carregarDestinos();
 
     // Após carregar destinos
     const origemGuardada = sessionStorage.getItem("origem");
