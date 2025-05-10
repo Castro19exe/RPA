@@ -41,7 +41,6 @@ def get_driver():
 
     return driver
 
-@eel.expose
 def get_train_hours(start_location, destination):
     driver = get_driver()
     start_location = normalize(start_location)
@@ -73,7 +72,7 @@ def get_train_hours(start_location, destination):
         hour_datetime = datetime.datetime.strptime(formated_hour, "%H:%M")
 
         hours.append(hour_datetime)
-
+    print(hours)
     driver.quit()
     return hours
 

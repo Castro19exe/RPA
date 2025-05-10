@@ -7,6 +7,11 @@ import os
 from sqllite_helper import SQLiteHelper as DB
 
 @eel.expose
+def get_train_hours_serialized(origem, destino):
+    raw = get_train_hours(origem, destino)  
+    return [h.isoformat() for h in raw]    
+
+@eel.expose
 def get_destinos_nome():
     return db.get_destinations_eel()
 
