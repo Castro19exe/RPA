@@ -45,12 +45,12 @@ async function carregarReservasCanceladas() {
                     btnRemarcar.className = 'btn btn-primary btn-sm';
                     btnRemarcar.innerHTML = '<i class="fas fa-trash-alt me-1"></i>Remarcar';
                     btnRemarcar.onclick = () => remarcarReserva(reserva.id);
-                    tdAcoes.appendChild(btnCancelar);
+                    tdAcoes.appendChild(btnRemarcar);
                 } else {
                     marcar = document.createElement('button');
                     btnRemarcar.className = 'btn btn-primary btn-sm disabled';
                     btnRemarcar.innerHTML = '<i class="fas fa-trash-alt me-1"></i>Remarcar';
-                    tdAcoes.appendChild(btnCancelar);
+                    tdAcoes.appendChild(btnRemarcar);
                 }
         
                 tr.appendChild(tdAcoes);
