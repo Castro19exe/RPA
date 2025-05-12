@@ -42,11 +42,11 @@ async function carregarReservas() {
 
 
                 const tdAcoes = document.createElement('td');
-                const btnEliminar = document.createElement('button');
-                btnEliminar.className = 'btn btn-danger btn-sm';
-                btnEliminar.innerHTML = '<i class="fas fa-trash-alt me-1"></i>Cancelar';
-                btnEliminar.onclick = () => cancelarReserva(reserva.id);
-                tdAcoes.appendChild(btnEliminar);
+                const btnCancelar = document.createElement('button');
+                btnCancelar.className = 'btn btn-danger btn-sm';
+                btnCancelar.innerHTML = '<i class="fas fa-trash-alt me-1"></i>Cancelar';
+                btnCancelar.onclick = () => cancelarReserva(reserva.id);
+                tdAcoes.appendChild(btnCancelar);
                 tr.appendChild(tdAcoes);
             
                 tbody.appendChild(tr);
@@ -59,16 +59,49 @@ async function carregarReservas() {
 }
 
 async function cancelarReserva(id) {
-    if (confirm('Tem certeza que deseja cancelar esta reserva?')) {
-        try {
+    const confirmado = await mostrarModalConfirmacaoBootstrap();
 
+    if (confirmado) {
+        try {
             await eel.cancelar_reserva(id)();
-            
             carregarReservas();
-            
         } catch (error) {
-            console.error('Erro ao eliminar reserva:', error);
-            alert('Ocorreu um erro ao eliminar o reserva.');
+            console.error('Erro ao cancelar reserva:', error);
+            alert('Ocorreu um erro ao cancelar a reserva.');
         }
     }
+}
+
+function mostrarModalConfirmacaoBootstrap() {
+    return new Promise((resolve) => {
+        const modalElement = document.getElementById('destinoModal');
+        const confirmarBtn = document.getElementById('confirmarAtualizacaoBtn');
+        const cancelarBtns = modalElement.querySelectorAll('[data-bs-dismiss="modal"]');
+
+        const bootstrapModal = new bootstrap.Modal(modalElement, {
+            backdrop: 'static',
+            keyboard: false
+        });
+
+        const cleanup = () => {
+            confirmarBtn.removeEventListener('click', onConfirmar);
+            cancelarBtns.forEach(btn => btn.removeEventListener('click', onCancelar));
+        };
+
+        const onConfirmar = () => {
+            cleanup();
+            bootstrapModal.hide();
+            resolve(true);
+        };
+
+        const onCancelar = () => {
+            cleanup();
+            resolve(false);
+        };
+
+        confirmarBtn.addEventListener('click', onConfirmar);
+        cancelarBtns.forEach(btn => btn.addEventListener('click', onCancelar));
+
+        bootstrapModal.show();
+    });
 }

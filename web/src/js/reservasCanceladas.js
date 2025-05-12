@@ -39,11 +39,11 @@ async function carregarReservasCanceladas() {
 
 
                 const tdAcoes = document.createElement('td');
-                const btnEliminar = document.createElement('button');
-                btnEliminar.className = 'btn btn-primary btn-sm';
-                btnEliminar.innerHTML = '<i class="fas fa-trash-alt me-1"></i>Remarcar';
-                btnEliminar.onclick = () => eliminarDestino(reserva.id);
-                tdAcoes.appendChild(btnEliminar);
+                const btnRemarcar = document.createElement('button');
+                btnRemarcar.className = 'btn btn-primary btn-sm';
+                btnRemarcar.innerHTML = '<i class="fas fa-trash-alt me-1"></i>Remarcar';
+                btnRemarcar.onclick = () => remarcarReserva(reserva.id);
+                tdAcoes.appendChild(btnRemarcar);
                 tr.appendChild(tdAcoes);
             
                 tbody.appendChild(tr);
@@ -55,17 +55,52 @@ async function carregarReservasCanceladas() {
     }
 }
 
-async function eliminarDestino(id) {
-    if (confirm('Tem certeza que deseja cancelar esta reserva?')) {
-        try {
 
-            await eel.delete_destination(id)();
-            
+
+
+async function remarcarReserva(id) {
+    const confirmado = await mostrarModalConfirmacaoBootstrap();
+
+    if (confirmado) {
+        try {
+            await eel.remarcar_reserva(id)();
             carregarReservasCanceladas();
-            
         } catch (error) {
-            console.error('Erro ao eliminar reserva:', error);
-            alert('Ocorreu um erro ao eliminar o reserva.');
+            console.error('Erro ao remarcar reserva:', error);
         }
     }
+}
+
+function mostrarModalConfirmacaoBootstrap() {
+    return new Promise((resolve) => {
+        const modalElement = document.getElementById('destinoModal');
+        const confirmarBtn = document.getElementById('confirmarAtualizacaoBtn');
+        const cancelarBtns = modalElement.querySelectorAll('[data-bs-dismiss="modal"]');
+
+        const bootstrapModal = new bootstrap.Modal(modalElement, {
+            backdrop: 'static',
+            keyboard: false
+        });
+
+        const cleanup = () => {
+            confirmarBtn.removeEventListener('click', onConfirmar);
+            cancelarBtns.forEach(btn => btn.removeEventListener('click', onCancelar));
+        };
+
+        const onConfirmar = () => {
+            cleanup();
+            bootstrapModal.hide();
+            resolve(true);
+        };
+
+        const onCancelar = () => {
+            cleanup();
+            resolve(false);
+        };
+
+        confirmarBtn.addEventListener('click', onConfirmar);
+        cancelarBtns.forEach(btn => btn.addEventListener('click', onCancelar));
+
+        bootstrapModal.show();
+    });
 }
