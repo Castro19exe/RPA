@@ -28,7 +28,7 @@
         </nav>
 
         <div class="container my-5">
-            <h1 class="text-center mb-4">Consultar Horário</h1>
+            <h1 class="display-4 text-center mb-4">Consultar Horário</h1>
             <div class="card shadow-sm p-4 mx-auto" style="max-width: 600px;">
                 <form id="reservaForm">
                     <div class="mb-3">
@@ -57,9 +57,14 @@
                         </div>
                     </div>
 
-                    <button id="consultarSubmit" type="submit" class="btn btn-primary w-100">
-                        <i class="fas fa-train me-2"></i>Consultar
-                    </button>
+                    <div class="d-flex justify-content-between">
+                        <a href="reservas_all.html" class="btn btn-danger" role="button">
+                            <i class="fa-solid fa-arrow-left me-2"></i>Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary" id="consultarSubmit">
+                            <i class="fas fa-train me-2"></i>Reservar
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

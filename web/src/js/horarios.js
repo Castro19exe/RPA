@@ -1,7 +1,52 @@
 import { showSpinner, hideSpinner } from './utils.js';
+
 let origem, destino;
+
 window.onload = async function () {
     carregarDestinos();
+
+    const origemGuardada = sessionStorage.getItem("origem");
+    const destinoGuardada = sessionStorage.getItem("destino");
+    
+    if (origemGuardada) {
+        selecionarValorNoSelect("origem", origemGuardada);
+        sessionStorage.removeItem("origem");
+    }
+    if (destinoGuardada) {
+        selecionarValorNoSelect("destino", destinoGuardada);
+        sessionStorage.removeItem("destino");
+    }
+
+    // Configurar botões de voz
+    document.getElementById("btnGravarOrigem").onclick = async function() {
+        const btn = this;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        try {
+            const resultado = await eel.reconhecer_origem()();
+            selecionarValorNoSelect("origem", resultado);
+        } catch (error) {
+            console.error("Erro ao reconhecer origem:", error);
+            alert("Erro ao reconhecer a origem por voz.");
+        }
+        btn.innerHTML = '<i class="fas fa-microphone"></i>';
+        btn.disabled = false;
+    };
+
+    document.getElementById("btnGravarDestino").onclick = async function() {
+        const btn = this;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        try {
+            const resultado = await eel.reconhecer_destino()();
+            selecionarValorNoSelect("destino", resultado);
+        } catch (error) {
+            console.error("Erro ao reconhecer destino:", error);
+            alert("Erro ao reconhecer o destino por voz.");
+        }
+        btn.innerHTML = '<i class="fas fa-microphone"></i>';
+        btn.disabled = false;
+    };
 
     document.getElementById("consultarSubmit").onclick = async function () {
         const btn = this;
@@ -25,7 +70,7 @@ window.onload = async function () {
         new_html.classList.add('container', 'mt-4');
         new_html.innerHTML = `
             <div class="container my-5">
-                <h1 class="text-center mb-4">Horários disponíveis de ${origem} para ${destino}</h1>
+                <h1 class="display-4 text-center mb-4">Horários disponíveis de ${origem} para ${destino}</h1>
             </div>
             <div class="d-flex justify-content mb-3" id="dateSelector"></div>
             <div class="table-responsive">
@@ -82,6 +127,20 @@ window.onload = async function () {
         renderizarHorarios(hours, selectedDate);
     };
 };
+
+function selecionarValorNoSelect(id, valor) {
+    const select = document.getElementById(id);
+
+    for (const option of select.options) {
+        if (option.textContent.toLowerCase() === valor.toLowerCase()) {
+            select.value = option.value;
+            return true;
+        }
+    }
+
+    alert(`Estação "${valor}" não encontrada.`);
+    return false;
+}
 
 function renderizarHorarios(hours, selectedDate) {
     const tbody = document.getElementById("horarioTableBody");

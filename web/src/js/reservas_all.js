@@ -46,13 +46,13 @@ async function carregarReservas() {
                 if (minutosRestantes > 15) {
                     const btnCancelar = document.createElement('button');
                     btnCancelar.className = 'btn btn-danger btn-sm';
-                    btnCancelar.innerHTML = '<i class="fas fa-trash-alt me-1"></i>Cancelar';
+                    btnCancelar.innerHTML = '<i class="fa-solid fa-xmark me-1"></i>Cancelar';
                     btnCancelar.onclick = () => cancelarReserva(reserva.id);
                     tdAcoes.appendChild(btnCancelar);
                 } else {
                     const btnCancelar = document.createElement('button');
                     btnCancelar.className = 'btn btn-danger btn-sm disabled';
-                    btnCancelar.innerHTML = '<i class="fas fa-trash-alt me-1"></i>Cancelar';
+                    btnCancelar.innerHTML = '<i class="fa-solid fa-xmark me-1"></i>Cancelar';
                     tdAcoes.appendChild(btnCancelar);
                 }
         
