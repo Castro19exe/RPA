@@ -3,6 +3,7 @@ import { showSpinner, hideSpinner } from './utils.js';
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('reservaForm');
 
+    atualizarHoraDia()
     const hoje = new Date();
     document.getElementById('data').value = hoje.toISOString().split('T')[0];
     const horas = String(hoje.getHours()).padStart(2, '0');
@@ -56,6 +57,29 @@ document.addEventListener('DOMContentLoaded', function () {
 const form = document.getElementById('reservaForm');
 const resumo = document.getElementById('resumoReserva');
 const modalResumo = document.getElementById('modalResumoTexto');
+
+function atualizarHoraDia(){
+    const dataInput = document.getElementById("data");
+    const horaInput = document.getElementById("hora");
+
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+    const dia = String(hoje.getDate()).padStart(2, '0');
+    const dataHoje = `${ano}-${mes}-${dia}`;
+    dataInput.min = dataHoje;
+
+    dataInput.addEventListener("change", function () {
+        if (dataInput.value === dataHoje) {
+            const agora = new Date();
+            const horas = String(agora.getHours()).padStart(2, '0');
+            const minutos = String(agora.getMinutes()).padStart(2, '0');
+            horaInput.min = `${horas}:${minutos}`;
+        } else {
+            horaInput.removeAttribute("min");
+        }
+    });
+}
 
 async function carregarDestinos() {
     try {
