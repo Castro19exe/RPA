@@ -1,5 +1,5 @@
 import { showSpinner, hideSpinner } from './utils.js';
-
+let origem, destino;
 window.onload = async function () {
     carregarDestinos();
 
@@ -7,8 +7,8 @@ window.onload = async function () {
         const btn = this;
         btn.disabled = true;
 
-        const origem = document.getElementById('origem').value;
-        const destino = document.getElementById('destino').value;
+        origem = document.getElementById('origem').value;
+        destino = document.getElementById('destino').value;
 
         showSpinner();
         const hours = await eel.get_train_hours_serialized(origem, destino)();
@@ -132,7 +132,49 @@ async function reservarHorario(horarioISO, dataSelecionada) {
     console.log("Reservar:");
     console.log("Data selecionada:", dataSelecionada);
     console.log("Hora ISO selecionada:", horarioISO);
-    const text = `Reservou ${dataSelecionada} às ${horarioISO}`;
+
+    // Combinar a dataSelecionada com as horas e minutos de horarioISO
+    const horaObj = new Date(horarioISO);
+    const [ano, mes, dia] = dataSelecionada.split('-');
+    const data = new Date(ano, mes - 1, dia, horaObj.getHours(), horaObj.getMinutes());
+
+    const options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    };
+    const formattedDate = new Date(data).toLocaleDateString('pt-PT', options);
+
+    const modalResumo = document.getElementById('modalResumoTexto');
+    modalResumo.innerHTML = `
+        <strong>Origem:</strong> ${origem}<br>
+        <strong>Destino:</strong> ${destino}<br>
+        <strong>Data:</strong> ${formattedDate}<br>
+        <strong>Numero de Passageiros:</strong><br>
+        <input type="number" class="form-control" id="passageiros" min="1" max="10" value="1" required>
+    `;
+
+    const reservaModal = new bootstrap.Modal(document.getElementById('reservaModal'));
+    reservaModal.show();
+
+    document.querySelector('#confirmarReservaBtn').addEventListener('click', function () {
+        const passageirosInput = document.getElementById('passageiros');
+        const passageiros = parseInt(passageirosInput.value, 10);
+    
+        if (!passageiros || passageiros < 1) {
+            alert('Por favor introduz um número válido de passageiros.');
+            return;
+        }
+    
+        eel.adicionar_reserva(origem, destino, formattedDate, passageiros)();
+        window.location.href = "reservas_all.html";
+    });
+    
+
+    const text = `Reservou ${dataSelecionada} às ${horaObj.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' })}`;
     alert(text);
 }
 
