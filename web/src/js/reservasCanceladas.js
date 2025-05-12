@@ -1,12 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
-    carregarReservas();
-
-
-
+    carregarReservasCanceladas();
 });
 
 
-async function carregarReservas() {
+async function carregarReservasCanceladas() {
     try {
         const reservas = await eel.get_reservas_eel()();
         
@@ -16,7 +13,7 @@ async function carregarReservas() {
         
         reservas.forEach(reserva => {
             const tr = document.createElement('tr');
-            if(reserva.canceled == 0){
+            if(reserva.canceled == 1){
             
                 const tdOrigem = document.createElement('td');
                 tdOrigem.textContent = reserva.origem;
@@ -43,9 +40,9 @@ async function carregarReservas() {
 
                 const tdAcoes = document.createElement('td');
                 const btnEliminar = document.createElement('button');
-                btnEliminar.className = 'btn btn-danger btn-sm';
-                btnEliminar.innerHTML = '<i class="fas fa-trash-alt me-1"></i>Cancelar';
-                btnEliminar.onclick = () => cancelarReserva(reserva.id);
+                btnEliminar.className = 'btn btn-primary btn-sm';
+                btnEliminar.innerHTML = '<i class="fas fa-trash-alt me-1"></i>Remarcar';
+                btnEliminar.onclick = () => eliminarDestino(reserva.id);
                 tdAcoes.appendChild(btnEliminar);
                 tr.appendChild(tdAcoes);
             
@@ -58,13 +55,13 @@ async function carregarReservas() {
     }
 }
 
-async function cancelarReserva(id) {
+async function eliminarDestino(id) {
     if (confirm('Tem certeza que deseja cancelar esta reserva?')) {
         try {
 
-            await eel.cancelar_reserva(id)();
+            await eel.delete_destination(id)();
             
-            carregarReservas();
+            carregarReservasCanceladas();
             
         } catch (error) {
             console.error('Erro ao eliminar reserva:', error);

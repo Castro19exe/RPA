@@ -7,6 +7,11 @@ import os
 from sqllite_helper import SQLiteHelper as DB
 
 @eel.expose
+def cancelar_reserva(id_reserva):
+    sql = f"UPDATE reservas SET canceled =1 where Id = {id_reserva}"
+    db.custom_sql_query(sql)
+
+@eel.expose
 def get_train_hours_serialized(origem, destino):
     raw = get_train_hours(origem, destino)  
     return [h.isoformat() for h in raw]    
