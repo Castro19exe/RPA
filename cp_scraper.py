@@ -72,7 +72,6 @@ def get_train_hours(start_location, destination):
         hour_datetime = datetime.datetime.strptime(formated_hour, "%H:%M")
 
         hours.append(hour_datetime)
-    print(hours)
     driver.quit()
     return hours
 
