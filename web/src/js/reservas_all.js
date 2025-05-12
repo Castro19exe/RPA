@@ -1,3 +1,4 @@
+import { parseDataHoraPt } from './utils.js';
 document.addEventListener('DOMContentLoaded', function() {
     carregarReservas();
 
@@ -15,44 +16,51 @@ async function carregarReservas() {
         tbody.innerHTML = '';
         
         reservas.forEach(reserva => {
-            const tr = document.createElement('tr');
-            if(reserva.canceled == 0){
-            
+            const dataHoraReserva = parseDataHoraPt(reserva.data);
+            const agora = new Date();
+        
+            // Ignorar reservas já passadas
+            if (reserva.canceled === 0 && dataHoraReserva && dataHoraReserva > agora) {
+                const tr = document.createElement('tr');
+        
                 const tdOrigem = document.createElement('td');
                 tdOrigem.textContent = reserva.origem;
                 tr.appendChild(tdOrigem);
-                
+        
                 const tdDestino = document.createElement('td');
                 tdDestino.textContent = reserva.destino;
                 tr.appendChild(tdDestino);
-                
-                // dividir data e hora
+        
                 const tdData = document.createElement('td');
                 tdData.textContent = reserva.data;
                 tr.appendChild(tdData);
-    
-                const tdHora = document.createElement('td');
-                tdHora.textContent = reserva.data;
-                tr.appendChild(tdHora);
-
-
+        
                 const tdPassageiros = document.createElement('td');
                 tdPassageiros.textContent = reserva.passageiros;
                 tr.appendChild(tdPassageiros);
-
-
+        
                 const tdAcoes = document.createElement('td');
-                const btnCancelar = document.createElement('button');
-                btnCancelar.className = 'btn btn-danger btn-sm';
-                btnCancelar.innerHTML = '<i class="fas fa-trash-alt me-1"></i>Cancelar';
-                btnCancelar.onclick = () => cancelarReserva(reserva.id);
-                tdAcoes.appendChild(btnCancelar);
+        
+                const minutosRestantes = (dataHoraReserva - agora) / (1000 * 60);
+        
+                if (minutosRestantes > 15) {
+                    const btnCancelar = document.createElement('button');
+                    btnCancelar.className = 'btn btn-danger btn-sm';
+                    btnCancelar.innerHTML = '<i class="fas fa-trash-alt me-1"></i>Cancelar';
+                    btnCancelar.onclick = () => cancelarReserva(reserva.id);
+                    tdAcoes.appendChild(btnCancelar);
+                } else {
+                    const btnCancelar = document.createElement('button');
+                    btnCancelar.className = 'btn btn-danger btn-sm disabled';
+                    btnCancelar.innerHTML = '<i class="fas fa-trash-alt me-1"></i>Cancelar';
+                    tdAcoes.appendChild(btnCancelar);
+                }
+        
                 tr.appendChild(tdAcoes);
-            
                 tbody.appendChild(tr);
             }
-
         });
+        
     } catch (error) {
         console.error('Erro ao carregar reservas:', error);
     }

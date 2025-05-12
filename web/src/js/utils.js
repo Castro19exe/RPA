@@ -1,4 +1,29 @@
 // para spinners e cenas comuns 
+function parseDataHoraPt(stringData) {
+    // Exemplo de input: "segunda-feira, 12 de maio de 2025 às 15:19"
+    const regex = /(\d{1,2}) de (\w+) de (\d{4}) às (\d{2}):(\d{2})/;
+    const meses = {
+        janeiro: 0,
+        fevereiro: 1,
+        março: 2,
+        abril: 3,
+        maio: 4,
+        junho: 5,
+        julho: 6,
+        agosto: 7,
+        setembro: 8,
+        outubro: 9,
+        novembro: 10,
+        dezembro: 11
+    };
+
+    const match = stringData.match(regex);
+    if (!match) return null;
+
+    const [_, dia, mesNome, ano, hora, minuto] = match;
+    const mes = meses[mesNome.toLowerCase()];
+    return new Date(ano, mes, dia, hora, minuto);
+}
 
 function showSpinner() {
     let spinner = document.getElementById('fullscreen-spinner');
@@ -106,4 +131,4 @@ function createToastContainer() {
     return container;
 }
 
-export { showSpinner, hideSpinner, showToast, showToastWarning, showToastSuccess };
+export { showSpinner, hideSpinner, showToast, showToastWarning, showToastSuccess, parseDataHoraPt };
