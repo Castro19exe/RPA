@@ -242,8 +242,6 @@ async function reservarHorario(horarioISO, dataSelecionada) {
     });
     
 
-    const text = `Reservou ${dataSelecionada} às ${horaObj.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' })}`;
-    alert(text);
 }
 
 async function carregarDestinos() {
