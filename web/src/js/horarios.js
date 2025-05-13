@@ -3,6 +3,13 @@ import { showSpinner, hideSpinner } from './utils.js';
 let origem, destino;
 
 window.onload = async function () {
+    fetch('src/shared/navbar.html')
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById('navbar').innerHTML = data;
+    })
+    .catch(error => console.error('Erro ao carregar navbar:', error));
+
     carregarDestinos();
 
     const origemGuardada = sessionStorage.getItem("origem");
@@ -56,7 +63,9 @@ window.onload = async function () {
         destino = document.getElementById('destino').value;
 
         showSpinner();
+
         const hours = await eel.get_train_hours_serialized(origem, destino)();
+        
         hideSpinner();
 
         const wrapper = document.querySelector('.wrapper');

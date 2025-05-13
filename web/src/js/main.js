@@ -7,6 +7,18 @@ window.onload = function () {
     const micBtn = document.getElementById("btnGravarAudio");
     const stopBtn = document.getElementById("btnPararAudio");
 
+    fetch('src/shared/navbar.html')
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById('navbar').innerHTML = data;
+
+        const btnMain = document.getElementById("btn-main");
+        if (btnMain) {
+            btnMain.classList.add("nav-link", "active");
+        }
+    })
+    .catch(error => console.error('Erro ao carregar navbar:', error));
+
     micBtn.onclick = async function () {
         micOn = true;
         micBtn.classList.add("recording");
@@ -51,11 +63,9 @@ window.onload = function () {
             const origem = match[1].trim();
             const destino = match[2].trim();
     
-            // Guardar os dados para usar depois em reservas.html
             sessionStorage.setItem("origem", origem);
             sessionStorage.setItem("destino", destino);
     
-            // Redirecionar
             window.location.href = "reservas.html";
         } else {
             showToastWarning("Não consegui interpretar a origem e o destino.");

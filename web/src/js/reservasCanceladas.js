@@ -1,8 +1,20 @@
 import { parseDataHoraPt } from './utils.js';
+
 document.addEventListener('DOMContentLoaded', function() {
+    fetch('src/shared/navbar.html')
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById('navbar').innerHTML = data;
+
+        const btnReservas = document.getElementById("btn-reservas");
+        if (btnReservas) {
+            btnReservas.classList.add("nav-link", "active");
+        }
+    })
+    .catch(error => console.error('Erro ao carregar navbar:', error));
+
     carregarReservasCanceladas();
 });
-
 
 async function carregarReservasCanceladas() {
     try {

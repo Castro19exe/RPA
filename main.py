@@ -1,6 +1,5 @@
 from voice import acionar_gravacao_audio
 from cp_scraper import get_next_train, get_train_hours,get_all_stops
-from tkinter import Tk, Button, Label, StringVar, ttk
 import eel
 import eel.browsers
 import os

@@ -5,6 +5,12 @@ body {
   background-color: #f4f6f9;
 }
 
+.menu-logo {
+  width: 100px;
+  margin-right: 10px;
+  padding: 5px;
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -16,7 +22,7 @@ body {
 }
 
 .main-section {
-  height: calc(100vh - 123px);
+  height: calc(100vh - 125px);
   padding-top: 40px;
 }
 

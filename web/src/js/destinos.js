@@ -5,6 +5,18 @@ let paginaAtual = 1;
 const registosPorPagina = 30;
 
 document.addEventListener('DOMContentLoaded', function() {
+    fetch('src/shared/navbar.html')
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById('navbar').innerHTML = data;
+
+        const btnDestinos = document.getElementById("btn-destinos");
+        if (btnDestinos) {
+            btnDestinos.classList.add("nav-link", "active");
+        }
+    })
+    .catch(error => console.error('Erro ao carregar navbar:', error));
+
     carregarDestinos();
 
     const atualizarBtn = document.getElementById('atualizarDestinosBtn');

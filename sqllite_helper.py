@@ -72,7 +72,6 @@ class SQLiteHelper:
 
 
     # ---------- Reservas ----------
-
     def get_reservas(self):
         self.cursor.execute("SELECT id, origem, destino, data ,passageiros,canceled FROM reservas ORDER BY id")
         return self.cursor.fetchall()

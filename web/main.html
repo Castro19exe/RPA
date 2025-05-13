@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.I.G | RPA</title>
-    <link rel="icon" href="src/img/logo.png">
+    <title>Comboios - RPA | Página Inicial</title>
+    <link rel="icon" href="src/img/logoTrain.png">
     <link rel="stylesheet" href="src/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -15,19 +15,9 @@
 </head>
 <body>
     <div class="wrapper d-flex flex-column min-vh-100">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
-            <a class="navbar-brand" href="#">S.I.G</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active" href="main.html">Página Inicial</a></li>
-                    <li class="nav-item"><a class="nav-link" href="destinos.html">Destinos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="reservas_all.html">Reservas</a></li>
-                </ul>
-                <a href="options.html" class="nav-link text-white"><i class="fas fa-cog fa-lg"></i></a>
-            </div>
-        </nav>
+        <div id="navbar"></div>
 
-        <div class="toast-container position-fixed end-0 p-3 top-msg">
+        <div class="toast-container position-fixed end-0 p-4 top-msg">
             <div id="customToastWarning" class="toast align-items-center text-bg-warning border-0" role="alert">
                 <div class="d-flex">
                     <div class="toast-body" id="toastMessageWarning"></div>
@@ -36,7 +26,7 @@
             </div>
         </div>
 
-        <div class="toast-container position-fixed end-0 p-3 top-msg">
+        <div class="toast-container position-fixed end-0 p-4 top-msg">
             <div id="customToastSuccess" class="toast align-items-center text-bg-success border-0" role="alert">
                 <div class="d-flex">
                     <div class="toast-body" id="toastMessageSuccess"></div>
@@ -46,7 +36,7 @@
         </div>
 
         <div class="container-fluid d-flex flex-column align-items-center justify-content-center main-section">
-            <h1 class="display-4 text-center mb-4">Don'tLostTheTrain 3000 Pro Max</h1>
+            <h1 class="display-4 text-center mb-4">Comboios - RPA</h1>
             <div class="d-flex align-items-center justify-content-center gap-3 flex-wrap">
                 <div class="d-flex flex-column align-items-center">
                     <textarea id="saida" class="form-control text-box" placeholder="A aguardar que diga algo..." readonly></textarea>
@@ -59,11 +49,11 @@
                 <button id="btnPararAudio" class="btn btn-outline-secondary record-btn shadow-sm">
                     <i class="fas fa-stop fa-2x"></i>
                 </button>
-                <button id="btnPesquisarGoogle" class="btn btn-outline-danger record-btn shadow-sm" disabled>
-                    <img src="https://pngimg.com/uploads/google/google_PNG19635.png" alt="Pesquisar no Google" class="img-fluid" />
-                </button>
                 <button id="btnAbrirCP" class="btn btn-outline-success record-btn shadow-sm" disabled>
                     <i class="fas fa-train fa-2x"></i>
+                </button>
+                <button id="btnPesquisarGoogle" class="btn btn-outline-danger record-btn shadow-sm" disabled>
+                    <img src="https://pngimg.com/uploads/google/google_PNG19635.png" alt="Pesquisar no Google" class="img-fluid" />
                 </button>
             </div>
         </div>
