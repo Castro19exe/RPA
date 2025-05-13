@@ -34,7 +34,7 @@ class SQLiteHelper:
         )
         self.create_table(
             "destinations",
-            "id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL"
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, status BOOLEAN NOT NULL DEFAULT 1"
         )
         self.create_table(
             "reservas",
@@ -46,21 +46,40 @@ class SQLiteHelper:
         return self.cursor.fetchall()
 
     # ---------- DESTINATIONS ----------
+    def get_all_destinations(self):
+        self.cursor.execute("SELECT id, name, status FROM destinations ORDER BY id")
+        return self.cursor.fetchall()
+
+    def get_all_destinations_eel(self):
+        """Versão do método para ser chamada via Eel"""
+        return [{'id': row[0], 'name': row[1], 'status': row[2]} for row in self.get_all_destinations()]
+
     def get_destinations(self):
-        self.cursor.execute("SELECT id, name FROM destinations ORDER BY id")
+        self.cursor.execute("SELECT id, name, status FROM destinations WHERE status = 1 ORDER BY id")
         return self.cursor.fetchall()
 
     def get_destinations_eel(self):
         """Versão do método para ser chamada via Eel"""
-        return [{'id': row[0], 'name': row[1]} for row in self.get_destinations()]
+        return [{'id': row[0], 'name': row[1], 'status': row[2]} for row in self.get_destinations()]
 
     def add_destination(self, name):
         self.cursor.execute("INSERT INTO destinations (name) VALUES (?)", (name,))
         self.conn.commit()
 
-    def update_destination(self, dest_id, new_name):
-        self.cursor.execute("UPDATE destinations SET name = ? WHERE id = ?", (new_name, dest_id))
+    def update_status_destination(self, dest_id):
+        self.cursor.execute("SELECT status FROM destinations WHERE id = ?", (dest_id,))
+        result = self.cursor.fetchone()
+
+        if result is None:
+            return False  # destino não encontrado
+
+        current_status = result[0]
+        new_status = 0 if current_status == 1 else 1
+
+        self.cursor.execute("UPDATE destinations SET status = ? WHERE id = ?", (new_status, dest_id))
         self.conn.commit()
+
+        return new_status
 
     def delete_destination(self, dest_id):
         self.cursor.execute("DELETE FROM destinations WHERE id = ?", (dest_id,))

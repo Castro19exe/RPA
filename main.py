@@ -1,5 +1,5 @@
 from voice import acionar_gravacao_audio
-from cp_scraper import get_next_train, get_train_hours,get_all_stops
+from cp_scraper import get_next_train, get_train_hours, get_all_stops
 import eel
 import eel.browsers
 import os
@@ -23,6 +23,14 @@ def get_train_hours_serialized(origem, destino):
 @eel.expose
 def get_destinos_nome():
     return db.get_destinations_eel()
+
+@eel.expose
+def get_all_destinos_nome():
+    return db.get_all_destinations_eel()
+
+@eel.expose
+def update_status(dest_id):
+    return db.update_status_destination(dest_id)
 
 @eel.expose
 def add_destination(name):

@@ -60,6 +60,42 @@ async function renderizarTabela(pagina) {
         tdNome.textContent = destino.name;
         tr.appendChild(tdNome);
 
+        const tdStatus = document.createElement('td');
+        
+        const btnStatus = document.createElement('button');
+        btnStatus.value = destino.status
+        tdStatus.appendChild(btnStatus);
+
+        if(destino.status == 1) {
+            btnStatus.className = "btn btn-danger"
+            btnStatus.innerHTML = "<i class='fa-solid fa-ban'></i> Disable"
+        }
+        else {
+            btnStatus.className = "btn btn-success"
+            btnStatus.innerHTML = "<i class='fa-solid fa-circle-check'></i> Enable"
+        }
+
+        btnStatus.onclick = async function() {
+            try {
+                const novoStatus = await eel.update_status(destino.id)();
+
+                // Atualizar interface diretamente sem refazer a tabela toda
+                destino.status = novoStatus;
+
+                if (novoStatus === 1) {
+                    btnStatus.className = "btn btn-danger";
+                    btnStatus.innerHTML = "<i class='fa-solid fa-ban'></i> Disable";
+                } else {
+                    btnStatus.className = "btn btn-success";
+                    btnStatus.innerHTML = "<i class='fa-solid fa-circle-check'></i> Enable";
+                }
+            } catch (error) {
+                console.error("Erro ao alternar status:", error);
+                alert("Erro ao atualizar o status do destino.");
+            }
+        };
+
+        tr.appendChild(tdStatus);
         tbody.appendChild(tr);
     });
 
@@ -86,7 +122,6 @@ async function renderizarPaginacao() {
 
 async function atualizarListaDestinos() {
     showSpinner()
-    
     await eel.update_all_destination()();
     hideSpinner();
     carregarDestinos()
@@ -94,11 +129,11 @@ async function atualizarListaDestinos() {
 
 async function carregarDestinos() {
     try {
-        destinos = await eel.get_destinations_eel()();
+        destinos = await eel.get_all_destinos_nome()();
         paginaAtual = 1;
         renderizarTabela(paginaAtual);
     } catch (error) {
         console.error('Erro ao carregar destinos:', error);
-        showToast("Ocorreu um erro ao carregar os destinos.");
+        // showToast("Ocorreu um erro ao carregar os destinos.");
     }
 }
