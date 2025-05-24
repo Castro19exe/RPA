@@ -43,6 +43,7 @@ def update_all_destination():
 
     for destination in destinations:
         db.add_destination(destination)
+
 # Define caminho do navegador
 edge_path = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'
 if os.path.exists(edge_path):
